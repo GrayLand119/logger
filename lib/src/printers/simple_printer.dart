@@ -17,7 +17,14 @@ class SimplePrinter extends LogPrinter {
     Level.error: '[E]',
     Level.wtf: '[WTF]',
   };
-
+  static final grepConsoleColor = {
+    Level.verbose: '[TRACE]',
+    Level.debug: '[DEBUG]',
+    Level.info: '[INFO]',
+    Level.warning: '[WARN]',
+    Level.error: '[ERROR]',
+    Level.wtf: '[FATAL]',
+  };
   static final levelColors = {
     Level.verbose: AnsiColor.fg(AnsiColor.grey(0.5)),
     Level.debug: AnsiColor.none(),
@@ -29,8 +36,9 @@ class SimplePrinter extends LogPrinter {
 
   final bool printTime;
   final bool colors;
+  final bool useGrepConsoleColors;
 
-  SimplePrinter({this.printTime = false, this.colors = true});
+  SimplePrinter({this.printTime = false, this.colors = true, this.useGrepConsoleColors = false});
 
   @override
   List<String> log(LogEvent event) {
@@ -44,7 +52,7 @@ class SimplePrinter extends LogPrinter {
     var prefix = levelPrefixes[level];
     var color = levelColors[level];
 
-    return colors ? color(prefix) : prefix;
+    return colors ? useGrepConsoleColors ? grepConsoleColor[level] : color(prefix) : prefix;
   }
 
   String _stringifyMessage(dynamic message) {

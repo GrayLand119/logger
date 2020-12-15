@@ -33,6 +33,15 @@ class PrettyPrinter extends LogPrinter {
     Level.wtf: AnsiColor.fg(199),
   };
 
+  static final grepConsoleColor = {
+    Level.verbose: '[TRACE]',
+    Level.debug: '[DEBUG]',
+    Level.info: '[INFO]',
+    Level.warning: '[WARN]',
+    Level.error: '[ERROR]',
+    Level.wtf: '[FATAL]',
+  };
+
   static final levelEmojis = {
     Level.verbose: '',
     Level.debug: '🐛 ',
@@ -57,6 +66,8 @@ class PrettyPrinter extends LogPrinter {
   String _middleBorder = '';
   String _bottomBorder = '';
 
+  final bool useGrepConsoleColors;
+
   PrettyPrinter({
     this.methodCount = 2,
     this.errorMethodCount = 8,
@@ -64,6 +75,7 @@ class PrettyPrinter extends LogPrinter {
     this.colors = true,
     this.printEmojis = true,
     this.printTime = false,
+    this.useGrepConsoleColors = false,
   }) {
     _startTime ??= DateTime.now();
 
@@ -168,7 +180,7 @@ class PrettyPrinter extends LogPrinter {
 
   AnsiColor _getLevelColor(Level level) {
     if (colors) {
-      return levelColors[level];
+      return useGrepConsoleColors ? grepConsoleColor[level] : levelColors[level];
     } else {
       return AnsiColor.none();
     }
